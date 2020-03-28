@@ -16,6 +16,10 @@ if (document.location.toString().indexOf('?') !== -1) {
 }
 
 var loc = $_GET['in'];
+
+if (typeof(loc) === "undefined" || loc === "World") {
+	loc = "US";
+}
 	  
 // Wait for document load
 $(document).ready(function(){
@@ -24,18 +28,39 @@ $(document).ready(function(){
 	fetch('https://pomber.github.io/covid19/timeseries.json')
 	  .then(response => response.json())
 	  .then(data => {
-		data[loc].forEach(({ date, confirmed, recovered, deaths }) =>
-			{
-				// Display data
-				document.getElementById("region").textContent = loc;
-				if (loc == "US") {
-					document.getElementById("region").textContent = "United States";
-				}
-				document.getElementById("date").textContent = date;
-				document.getElementById("confirmed").textContent = confirmed;
-				document.getElementById("deaths").textContent = deaths;
+		if (loc === "World") {
+			var date;
+			var confirmed = 0;
+			var deaths = 0;
+			for (n = 0; n < Object.keys(data).length; n++) {
+				console.log(n); // Debug
+				Object.values(data)[n].forEach(({ date, confirmed, recovered, deaths }) =>
+					{
+						// Count up cases and deaths
+						date = date;
+						confirmed += confirmed;
+						deaths += deaths;
+					}
+				)
 			}
-		)
+			document.getElementById("region").textContent = loc;
+			document.getElementById("date").textContent = date;
+			document.getElementById("confirmed").textContent = confirmed;
+			document.getElementById("deaths").textContent = deaths;
+		} else {
+			data[loc].forEach(({ date, confirmed, recovered, deaths }) =>
+				{
+					// Display data
+					document.getElementById("region").textContent = loc;
+					if (loc === "US") {
+						document.getElementById("region").textContent = "United States";
+					}
+					document.getElementById("date").textContent = date;
+					document.getElementById("confirmed").textContent = confirmed;
+					document.getElementById("deaths").textContent = deaths;
+				}
+			)
+		}
 	});
 	  
 });

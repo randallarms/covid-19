@@ -13,6 +13,7 @@
 <div id="selection-div">
 	<select id="selection" onchange="updateURL(document.getElementById('selection'));">
 		<option selected disabled><?php if(isset($_GET['in'])){echo $_GET['in'];}else{echo "Select region";} ?></option>
+		<option value="World">Worldwide</option>
 		<option value="US">United States</option>
 		<option value="Afghanistan">Afghanistan</option>
 		<option value="Albania">Albania</option>
