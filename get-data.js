@@ -17,8 +17,8 @@ if (document.location.toString().indexOf('?') !== -1) {
 
 var loc = $_GET['in'];
 
-if (typeof(loc) === "undefined" || loc === "World") {
-	loc = "US";
+if (typeof(loc) === "undefined") {
+	loc = "Worldwide";
 }
 	  
 // Wait for document load
@@ -28,25 +28,28 @@ $(document).ready(function(){
 	fetch('https://pomber.github.io/covid19/timeseries.json')
 	  .then(response => response.json())
 	  .then(data => {
-		if (loc === "World") {
-			var date;
-			var confirmed = 0;
-			var deaths = 0;
+		if (loc === "Worldwide") {
+			var total_date;
+			var total_confirmed = 0;
+			var total_deaths = 0;
 			for (n = 0; n < Object.keys(data).length; n++) {
-				console.log(n); // Debug
+				var subtotal_confirmed = 0;
+				var subtotal_deaths = 0;
 				Object.values(data)[n].forEach(({ date, confirmed, recovered, deaths }) =>
 					{
-						// Count up cases and deaths
-						date = date;
-						confirmed += confirmed;
-						deaths += deaths;
+						total_date = date;
+						subtotal_confirmed = confirmed;
+						subtotal_deaths = deaths;
 					}
 				)
+				// Count up cases and deaths
+				total_confirmed += subtotal_confirmed;
+				total_deaths += subtotal_deaths;
 			}
 			document.getElementById("region").textContent = loc;
-			document.getElementById("date").textContent = date;
-			document.getElementById("confirmed").textContent = confirmed;
-			document.getElementById("deaths").textContent = deaths;
+			document.getElementById("date").textContent = total_date;
+			document.getElementById("confirmed").textContent = total_confirmed;
+			document.getElementById("deaths").textContent = total_deaths;
 		} else {
 			data[loc].forEach(({ date, confirmed, recovered, deaths }) =>
 				{
