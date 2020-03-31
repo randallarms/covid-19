@@ -28,7 +28,9 @@ $(document).ready(function(){
 	fetch('https://pomber.github.io/covid19/timeseries.json')
 	  .then(response => response.json())
 	  .then(data => {
+		  
 		if (loc === "Worldwide") {
+			
 			var total_date;
 			var total_confirmed = 0;
 			var total_deaths = 0;
@@ -50,7 +52,16 @@ $(document).ready(function(){
 			document.getElementById("date").textContent = total_date;
 			document.getElementById("confirmed").textContent = total_confirmed;
 			document.getElementById("deaths").textContent = total_deaths;
+			
+		} else if (data[loc] === undefined) {
+			
+			document.getElementById("region").textContent = loc;
+			document.getElementById("date").textContent = "Unreported";
+			document.getElementById("confirmed").textContent = 0;
+			document.getElementById("deaths").textContent = 0;
+			
 		} else {
+			
 			data[loc].forEach(({ date, confirmed, recovered, deaths }) =>
 				{
 					// Display data
@@ -63,7 +74,9 @@ $(document).ready(function(){
 					document.getElementById("deaths").textContent = deaths;
 				}
 			)
+			
 		}
+		
 	});
 	  
 });
