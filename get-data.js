@@ -24,6 +24,9 @@ if (typeof(loc) === "undefined") {
 // Wait for document load
 $(document).ready(function(){
 	
+	// Date format options
+	var date_options = { year: 'numeric', month: 'short', day: 'numeric' };
+	
 	// Fetch data
 	fetch('https://pomber.github.io/covid19/timeseries.json')
 	  .then(response => response.json())
@@ -48,10 +51,12 @@ $(document).ready(function(){
 				total_confirmed += subtotal_confirmed;
 				total_deaths += subtotal_deaths;
 			}
+			
+			//Data
 			document.getElementById("region").textContent = loc;
-			document.getElementById("date").textContent = total_date;
-			document.getElementById("confirmed").textContent = total_confirmed;
-			document.getElementById("deaths").textContent = total_deaths;
+			document.getElementById("date").textContent = new Date(total_date).toLocaleDateString("en-US", date_options);
+			document.getElementById("confirmed").textContent = total_confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			document.getElementById("deaths").textContent = total_deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			
 		} else if (data[loc] === undefined) {
 			
@@ -68,10 +73,13 @@ $(document).ready(function(){
 					document.getElementById("region").textContent = loc;
 					if (loc === "US") {
 						document.getElementById("region").textContent = "United States";
+						
 					}
-					document.getElementById("date").textContent = date;
-					document.getElementById("confirmed").textContent = confirmed;
-					document.getElementById("deaths").textContent = deaths;
+	
+					// Data
+					document.getElementById("date").textContent = new Date(date).toLocaleDateString("en-US", date_options);
+					document.getElementById("confirmed").textContent = confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+					document.getElementById("deaths").textContent = deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 				}
 			)
 			
