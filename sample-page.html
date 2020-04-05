@@ -1,20 +1,93 @@
-<span id="title">COVID-19 Tracker</span>
+<!-- JS Charting script -->
+
+<script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
 <!-- Drop-down list input of available regions -->
 
-<script type="text/javascript">
-	// Redirect to this page w/ URL params
-	function updateURL(elem) {
-		var val = elem.options[elem.selectedIndex].value;
-		window.location.href = "sample-page.html?in=" + val; \
-	}
-</script>
+		<script type="text/javascript">
+			function updateURL(val) {
+				window.location.href = "/sample-page.html?in=" + val;
+			}
+			
+			function select(elem) {
+				var val = elem.options[elem.selectedIndex].value;
+				updateURL(val);
+			}
+			
+			function input(elem) {
+				if (event.keyCode === 13){
+					var val = elem.value;
+					updateURL(val);
+				}
+			}
+		</script>
 
-<div id="selection-div">
+<!-- Search by U.S. county -->
+
+<div id="input-container">
+	<input id="input" name="input" placeholder="Search by county (i.e. Los Angeles, California)" onkeypress="input(document.getElementById('input'))">
+</div>
+		
+<!-- Search by region (country or U.S. state) -->
+
+<div id="selection-container">
 	<select id="selection" onchange="updateURL(document.getElementById('selection'));">
-		<option selected disabled>Select region</option>
+		<option selected disabled>Select region (country or US state)</option>
 		<option value="Worldwide">Worldwide</option>
 		<option value="US">United States</option>
+		<!-- US States -->
+			<option class="selection-option" value="Alabama">Alabama</option>
+			<option class="selection-option" value="Alaska">Alaska</option>
+			<option class="selection-option" value="Arizona">Arizona</option>
+			<option class="selection-option" value="Arkansas">Arkansas</option>
+			<option class="selection-option" value="California">California</option>
+			<option class="selection-option" value="Colorado">Colorado</option>
+			<option class="selection-option" value="Connecticut">Connecticut</option>
+			<option class="selection-option" value="Delaware">Delaware</option>
+			<option class="selection-option" value="District of Columbia">District Of Columbia</option>
+			<option class="selection-option" value="Florida">Florida</option>
+			<option class="selection-option" value="Georgia">Georgia</option>
+			<option class="selection-option" value="Hawaii">Hawaii</option>
+			<option class="selection-option" value="Idaho">Idaho</option>
+			<option class="selection-option" value="Illinois">Illinois</option>
+			<option class="selection-option" value="Indiana">Indiana</option>
+			<option class="selection-option" value="Iowa">Iowa</option>
+			<option class="selection-option" value="Kansas">Kansas</option>
+			<option class="selection-option" value="Kentucky">Kentucky</option>
+			<option class="selection-option" value="Louisiana">Louisiana</option>
+			<option class="selection-option" value="Maine">Maine</option>
+			<option class="selection-option" value="Maryland">Maryland</option>
+			<option class="selection-option" value="Massachusetts">Massachusetts</option>
+			<option class="selection-option" value="Michigan">Michigan</option>
+			<option class="selection-option" value="Minnesota">Minnesota</option>
+			<option class="selection-option" value="Mississippi">Mississippi</option>
+			<option class="selection-option" value="Missouri">Missouri</option>
+			<option class="selection-option" value="Montana">Montana</option>
+			<option class="selection-option" value="Nebraska">Nebraska</option>
+			<option class="selection-option" value="Nevada">Nevada</option>
+			<option class="selection-option" value="New Hampshire">New Hampshire</option>
+			<option class="selection-option" value="New Jersey">New Jersey</option>
+			<option class="selection-option" value="New Mexico">New Mexico</option>
+			<option class="selection-option" value="New York">New York</option>
+			<option class="selection-option" value="North Carolina">North Carolina</option>
+			<option class="selection-option" value="North Dakota">North Dakota</option>
+			<option class="selection-option" value="Ohio">Ohio</option>
+			<option class="selection-option" value="Oklahoma">Oklahoma</option>
+			<option class="selection-option" value="Oregon">Oregon</option>
+			<option class="selection-option" value="Pennsylvania">Pennsylvania</option>
+			<option class="selection-option" value="Rhode Island">Rhode Island</option>
+			<option class="selection-option" value="South Carolina">South Carolina</option>
+			<option class="selection-option" value="South Dakota">South Dakota</option>
+			<option class="selection-option" value="Tennessee">Tennessee</option>
+			<option class="selection-option" value="Texas">Texas</option>
+			<option class="selection-option" value="Utah">Utah</option>
+			<option class="selection-option" value="Vermont">Vermont</option>
+			<option class="selection-option" value="Virginia">Virginia</option>
+			<option class="selection-option" value="Washington">Washington</option>
+			<option class="selection-option" value="West Virginia">West Virginia</option>
+			<option class="selection-option" value="Wisconsin">Wisconsin</option>
+			<option class="selection-option" value="Wyoming">Wyoming</option>
+		<!-- Other countries -->
 		<option value="Afghanistan">Afghanistan</option>
 		<option value="Albania">Albania</option>
 		<option value="Algeria">Algeria</option>
@@ -214,6 +287,8 @@
 <script src="get-data.js"></script>
 
 <p id="data">
+	<span id="title">COVID-19 Tracker</span><br />
+
 	<span id="region">Loading...</span><br />
 	<span id="date">(n/a)</span><br /><br />
 	

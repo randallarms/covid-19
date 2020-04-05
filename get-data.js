@@ -20,6 +20,12 @@ var loc = $_GET['in'];
 if (typeof(loc) === "undefined") {
 	loc = "Worldwide";
 }
+
+function fill_data(date, cases, deaths) {
+	document.getElementById("date").textContent = date.toUpperCase();
+	document.getElementById("confirmed").textContent = cases;
+	document.getElementById("deaths").textContent = deaths;
+}
 	  
 // Wait for document load
 $(document).ready(function(){
@@ -27,11 +33,22 @@ $(document).ready(function(){
 	// Date format options
 	var date_options = { year: 'numeric', month: 'short', day: 'numeric' };
 	
-	// Fetch data
+	// Set the region/location text
+	document.getElementById("region").textContent = loc.toUpperCase();
+	
+	// Fetch country data from Rodrigo Pombo & Johns Hopkins CSSE
 	fetch('https://pomber.github.io/covid19/timeseries.json')
 	  .then(response => response.json())
 	  .then(data => {
 		  
+		// List of countries
+		var countries = [];
+		
+		for (n = 0; n < Object.keys(data).length; n++) {
+			countries.push(Object.keys(data)[n]);
+		}
+		 
+		// Handle the worldwide region
 		if (loc === "Worldwide") {
 			
 			var total_date;
@@ -53,35 +70,89 @@ $(document).ready(function(){
 			}
 			
 			//Data
-			document.getElementById("region").textContent = loc;
-			document.getElementById("date").textContent = new Date(total_date).toLocaleDateString("en-US", date_options);
-			document.getElementById("confirmed").textContent = total_confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			document.getElementById("deaths").textContent = total_deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			
-		} else if (data[loc] === undefined) {
-			
-			document.getElementById("region").textContent = loc;
-			document.getElementById("date").textContent = "Unreported";
-			document.getElementById("confirmed").textContent = 0;
-			document.getElementById("deaths").textContent = 0;
-			
-		} else {
+			fill_data(
+				new Date(total_date).toLocaleDateString("en-US", date_options), 
+				total_confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+				total_deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+			);
+
+		// Handle a country region
+		} else if (countries.includes(loc)) {
 			
 			data[loc].forEach(({ date, confirmed, recovered, deaths }) =>
 				{
+					
 					// Display data
-					document.getElementById("region").textContent = loc;
 					if (loc === "US") {
-						document.getElementById("region").textContent = "United States";
-						
+						document.getElementById("region").textContent = "UNITED STATES";
 					}
 	
 					// Data
-					document.getElementById("date").textContent = new Date(date).toLocaleDateString("en-US", date_options);
-					document.getElementById("confirmed").textContent = confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-					document.getElementById("deaths").textContent = deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-				}
-			)
+					fill_data(
+						new Date(date).toLocaleDateString("en-US", date_options), 
+						confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+						deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+					);
+					
+				})
+			
+		// Handle state & county regions
+		} else {
+			
+			// Flag for determined undefined region/location
+			var locFlag = false;
+			
+			// Fetch & check county data from NY Times
+			JSC.fetch('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+			  .then(response => response.text())
+			  .then(data => {
+				  
+				 let countyData = JSC.csv2Json(data, ",");
+				  
+				 countyData.forEach(({ date, county, state, fips, cases, deaths }) => 
+						{
+							
+							if (loc === (county + ", " + state)) {
+								locFlag = true;
+								// Data
+								fill_data(
+									new Date(date).toLocaleDateString("en-US", date_options), 
+									cases.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+									deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+								);
+							}
+						
+						})
+				  
+			  });
+			  
+			// Fetch & check state data from NY Times
+			JSC.fetch('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
+			  .then(response => response.text())
+			  .then(data => {
+				  
+					  let stateData = JSC.csv2Json(data, ",");
+				  
+					  stateData.forEach(({ date, state, fips, cases, deaths }) => 
+						{
+						
+							if (loc === state) {
+								locFlag = true;
+								// Data
+								fill_data(
+									new Date(date).toLocaleDateString("en-US", date_options), 
+									cases.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+									deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+								);
+							}
+						
+						})
+						
+			  });
+			  
+			if (!locFlag) {
+				fill_data(new Date().toLocaleDateString("en-US", date_options), "Unreported", "Unreported")
+			}
 			
 		}
 		
