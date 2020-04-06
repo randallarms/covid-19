@@ -17,14 +17,16 @@ if (document.location.toString().indexOf('?') !== -1) {
 
 var loc = $_GET['in'];
 
+// Show worldwide data by default
 if (typeof(loc) === "undefined") {
 	loc = "Worldwide";
 }
 
+// Put the data onto the page
 function fill_data(date, cases, deaths) {
 	document.getElementById("date").textContent = date.toUpperCase();
-	document.getElementById("confirmed").textContent = cases;
-	document.getElementById("deaths").textContent = deaths;
+	document.getElementById("confirmed").textContent = cases.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	document.getElementById("deaths").textContent = deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 	  
 // Wait for document load
@@ -72,8 +74,8 @@ $(document).ready(function(){
 			//Data
 			fill_data(
 				new Date(total_date).toLocaleDateString("en-US", date_options), 
-				total_confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-				total_deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+				total_confirmed,
+				total_deaths
 			);
 
 		// Handle a country region
@@ -90,8 +92,8 @@ $(document).ready(function(){
 					// Data
 					fill_data(
 						new Date(date).toLocaleDateString("en-US", date_options), 
-						confirmed.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-						deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+						confirmed,
+						deaths
 					);
 					
 				})
@@ -117,8 +119,8 @@ $(document).ready(function(){
 								// Data
 								fill_data(
 									new Date(date).toLocaleDateString("en-US", date_options), 
-									cases.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-									deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+									cases,
+									deaths
 								);
 							}
 						
@@ -141,8 +143,8 @@ $(document).ready(function(){
 								// Data
 								fill_data(
 									new Date(date).toLocaleDateString("en-US", date_options), 
-									cases.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
-									deaths.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+									cases,
+									deaths
 								);
 							}
 						
