@@ -6,7 +6,7 @@ Track coronavirus statistics live by region @ https://www.randallarms.com/covid-
 
 Simply select a region  (worldwide, country, U.S. state or county) from the drop-down selection list, and the page will display your results.
 
-Regions not listed in the selection menu may not be reported by Johns Hopskins CSSE or the NY Times. 
+Regions not listed in the selection menu may not be reported by Johns Hopskins CSSE or the NY Times. Counties in the NYC area may be reported singularly under "New York City, New York".
 
 If any region information is inaccurate, please feel free to contact me or submit a pull request. Thank you.
 
