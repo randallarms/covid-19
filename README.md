@@ -2,6 +2,8 @@
 
 Track coronavirus statistics live by region @ https://www.randallarms.com/covid-19
 
+Currently supports live statistic display only. Features coming soon: charts, maps, and graphs pages.
+
 ### How to use
 
 Simply select a region  (worldwide, country, U.S. state or county) from the drop-down selection list, and the page will display your results.
