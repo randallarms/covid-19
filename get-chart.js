@@ -23,7 +23,7 @@ if (typeof(loc) === "undefined") {
 }
 
 // Put the data onto the page
-function fill_data(dates[], cases[], deaths[]) {	
+function fill_data(dates, cases, deaths) {	
 	var ctx = document.getElementById('chart').getContext('2d');
 	var chart = new Chart(ctx, {
 	// The type of chart we want to create
@@ -31,17 +31,17 @@ function fill_data(dates[], cases[], deaths[]) {
 
 	// The data for our dataset
 	data: {
-		labels: dates[],
+		labels: dates,
 		datasets: [{
 			label: 'Cases',
 			backgroundColor: 'rgb(255, 99, 132)',
 			borderColor: 'rgb(255, 99, 132)',
-			data: cases[]
+			data: cases
 		}, {
 			label: 'Deaths',
 			backgroundColor: 'rgb(255, 99, 132)',
 			borderColor: 'rgb(255, 99, 132)',
-			data: deaths[]
+			data: deaths
 		}]
 	},
 
@@ -71,9 +71,9 @@ $(document).ready(function(){
 		// Handle the worldwide region
 		if (loc === "Worldwide") {
 			
-			var dates[];
-			var confirmed[];
-			var deaths[];
+			var dates = new Array();
+			var confirmed = new Array();
+			var deaths = new Array();
 			for (n = 0; n < Object.keys(data).length; n++) {
 				var subtotal_confirmed = 0;
 				var subtotal_deaths = 0;
@@ -91,9 +91,9 @@ $(document).ready(function(){
 			
 			//Data
 			fill_data(
-				dates[], 
-				confirmed[],
-				deaths[]
+				dates, 
+				confirmed,
+				deaths
 			);
 
 		// Handle a country region
@@ -101,9 +101,9 @@ $(document).ready(function(){
 			
 			var n = 0;
 			
-			var dates[];
-			var confirmed[];
-			var deaths[];
+			var dates = new Array();
+			var confirmed = new Array();
+			var deaths = new Array();
 			
 			data[loc].forEach(({ date, confirmed, recovered, deaths }) =>
 				{
@@ -115,9 +115,9 @@ $(document).ready(function(){
 				
 			//Data
 			fill_data(
-				dates[], 
-				confirmed[],
-				deaths[]
+				dates, 
+				confirmed,
+				deaths
 			);
 			
 		// Handle state & county regions
@@ -133,9 +133,9 @@ $(document).ready(function(){
 				  
 				 let countyData = JSC.csv2Json(data, ",");
 				 
-				 var dates[];
-				 var confirmed[]
-				 var deaths[];
+				 var dates = new Array();
+				 var confirmed = new Array();
+				 var deaths = new Array();
 				  
 				 countyData.forEach(({ date, county, state, fips, cases, deaths }) => 
 						{
@@ -155,9 +155,9 @@ $(document).ready(function(){
 						
 					//Data
 					fill_data(
-						dates[], 
-						confirmed[],
-						deaths[]
+						dates, 
+						confirmed,
+						deaths
 					);
 				  
 			  });
@@ -169,9 +169,9 @@ $(document).ready(function(){
 				  
 				  let stateData = JSC.csv2Json(data, ",");
 				  
-				  var dates[];
-				  var confirmed[]
-				  var deaths[];
+				  var dates = new Array();
+				  var confirmed = new Array();
+				  var deaths = new Array();
 			  
 				  stateData.forEach(({ date, state, fips, cases, deaths }) => 
 					{
@@ -192,9 +192,9 @@ $(document).ready(function(){
 						
 					//Data
 					fill_data(
-						dates[], 
-						confirmed[],
-						deaths[]
+						dates, 
+						confirmed,
+						deaths
 					);
 						
 			  });
