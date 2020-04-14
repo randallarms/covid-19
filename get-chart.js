@@ -22,32 +22,45 @@ if (typeof(loc) === "undefined") {
 	loc = "Worldwide";
 }
 
+var g_dates = new Array();
+var g_cases = new Array();
+var g_deaths = new Array();
+
 // Put the data onto the page
-function fill_data(dates, cases, deaths) {	
+function fill_data() {
+	
+	// Set date of latest info
+	var latest = g_dates[g_dates.length - 1];
+	document.getElementById("date").textContent = latest.toUpperCase();
+	
+	// Create the chart
 	var ctx = document.getElementById('chart').getContext('2d');
 	var chart = new Chart(ctx, {
-	// The type of chart we want to create
-	type: 'line',
+		
+		// The type of chart we want to create
+		type: 'line',
 
-	// The data for our dataset
-	data: {
-		labels: dates,
-		datasets: [{
-			label: 'Cases',
-			backgroundColor: 'rgb(255, 99, 132)',
-			borderColor: 'rgb(255, 99, 132)',
-			data: cases
-		}, {
-			label: 'Deaths',
-			backgroundColor: 'rgb(255, 99, 132)',
-			borderColor: 'rgb(255, 99, 132)',
-			data: deaths
-		}]
-	},
+		// The data for the dataset
+		data: {
+			labels: g_dates,
+			datasets: [{
+				label: 'Cases',
+				backgroundColor: 'rgb(255, 99, 132)',
+				borderColor: 'rgb(255, 99, 132)',
+				data: g_cases
+			}, {
+				label: 'Deaths',
+				backgroundColor: 'rgb(255, 99, 132)',
+				borderColor: 'rgb(255, 99, 132)',
+				data: g_deaths
+			}]
+		},
 
-	// Configuration options go here
-	options: {}
+		// Configuration options go here
+		options: {}
+	
 	});
+	
 }
 	  
 // Wait for document load
@@ -90,11 +103,10 @@ $(document).ready(function(){
 			}
 			
 			//Data
-			fill_data(
-				dates, 
-				confirmed,
-				deaths
-			);
+			g_dates = dates.slice(0);
+			g_confirmed = confirmed.slice(0);
+			g_deaths = deaths.slice(0);
+			fill_data();
 
 		// Handle a country region
 		} else if (countries.includes(loc)) {
@@ -114,11 +126,10 @@ $(document).ready(function(){
 				})
 				
 			//Data
-			fill_data(
-				dates, 
-				confirmed,
-				deaths
-			);
+			g_dates = dates.slice(0);
+			g_confirmed = confirmed.slice(0);
+			g_deaths = deaths.slice(0);
+			fill_data();
 			
 		// Handle state & county regions
 		} else {
@@ -154,11 +165,10 @@ $(document).ready(function(){
 						})
 						
 					//Data
-					fill_data(
-						dates, 
-						confirmed,
-						deaths
-					);
+					g_dates = dates.slice(0);
+					g_confirmed = confirmed.slice(0);
+					g_deaths = deaths.slice(0);
+					fill_data();
 				  
 			  });
 			  
@@ -191,16 +201,16 @@ $(document).ready(function(){
 					})
 						
 					//Data
-					fill_data(
-						dates, 
-						confirmed,
-						deaths
-					);
+					g_dates = dates.slice(0);
+					g_confirmed = confirmed.slice(0);
+					g_deaths = deaths.slice(0);
+					fill_data();
 						
 			  });
 			  
+			// Handling for location not set/found
 			if (!locFlag) {
-				fill_data(0,0,0)
+				fill_data();
 			}
 			
 		}
