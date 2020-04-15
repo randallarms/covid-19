@@ -30,7 +30,8 @@ var g_deaths = new Array();
 function fill_data() {
 	
 	// Set date of latest info
-	var latest = g_dates[g_dates.length - 1];
+	var date_options = { year: 'numeric', month: 'short', day: 'numeric' };
+	var latest = new Date(g_dates[g_dates.length - 1]).toLocaleDateString("en-US", date_options);
 	document.getElementById("date").textContent = latest.toUpperCase();
 	
 	// Create the chart
@@ -84,28 +85,34 @@ $(document).ready(function(){
 		// Handle the worldwide region
 		if (loc === "Worldwide") {
 			
-			var dates = new Array();
-			var confirmed = new Array();
-			var deaths = new Array();
+			var dates_arr = [];
+			var confirmed_arr = [];
+			var deaths_arr = [];
 			for (n = 0; n < Object.keys(data).length; n++) {
-				var subtotal_confirmed = 0;
-				var subtotal_deaths = 0;
+				var prev_confirmed = 0;
+				var prev_deaths = 0;
 				Object.values(data)[n].forEach(({ date, confirmed, recovered, deaths }) =>
 					{
-						date[n] = date;
-						subtotal_confirmed += confirmed;
-						subtotal_deaths += deaths;
+						if (n <= 0) {
+							dates_arr.push(date);
+							confirmed_arr.push(confirmed - prev_confirmed);
+							deaths_arr.push(deaths - prev_deaths);
+						} else {
+							confirmed_arr[n] = confirmed_arr[n] + (confirmed - prev_confirmed);
+							deaths_arr[n] = deaths_arr[n] + (deaths - prev_deaths);
+						}
+						prev_confirmed = confirmed;
+						prev_deaths = deaths;
 					}
 				)
-				// Count up cases and deaths
-				confirmed[n] = subtotal_confirmed;
-				deaths[n] = subtotal_deaths;
+				prev_confirmed = 0;
+				prev_deaths = 0;
 			}
 			
 			//Data
-			g_dates = dates.slice(0);
-			g_confirmed = confirmed.slice(0);
-			g_deaths = deaths.slice(0);
+			g_dates = dates_arr.slice(0);
+			g_cases = confirmed_arr.slice(0);
+			g_deaths = deaths_arr.slice(0);
 			fill_data();
 
 		// Handle a country region
@@ -127,7 +134,7 @@ $(document).ready(function(){
 				
 			//Data
 			g_dates = dates.slice(0);
-			g_confirmed = confirmed.slice(0);
+			g_cases = confirmed.slice(0);
 			g_deaths = deaths.slice(0);
 			fill_data();
 			
@@ -166,7 +173,7 @@ $(document).ready(function(){
 						
 					//Data
 					g_dates = dates.slice(0);
-					g_confirmed = confirmed.slice(0);
+					g_cases = confirmed.slice(0);
 					g_deaths = deaths.slice(0);
 					fill_data();
 				  
@@ -202,7 +209,7 @@ $(document).ready(function(){
 						
 					//Data
 					g_dates = dates.slice(0);
-					g_confirmed = confirmed.slice(0);
+					g_cases = confirmed.slice(0);
 					g_deaths = deaths.slice(0);
 					fill_data();
 						
