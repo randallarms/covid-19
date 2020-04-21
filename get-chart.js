@@ -23,11 +23,9 @@ if (typeof(loc) === "undefined") {
 }
 
 var g_dates = new Array();
-var g_cases = new Array();
-var g_deaths = new Array();
 
 // Put the data onto the page
-function fill_data() {
+function fill_data(series) {
 	
 	// Set date of latest info
 	var date_options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -35,27 +33,28 @@ function fill_data() {
 	document.getElementById("date").textContent = latest.toUpperCase();
 	
 	// Create the chart
-	var ctx = document.getElementById('chart').getContext('2d');
-	var chart = new Chart(ctx, {
+	const chart = new JSC.Chart('chart', {
 		
-		// The type of chart we want to create
-		type: 'line',
+		// The type of chart
+		type: "line",
+		
+		legend_visible: true,
+		
+		xAxis: {
+			crosshair_enabled: true,
+			scale: {type: 'time' }
+		},
+		
+		defaultSeries: {
+			defaultPoint_marker: {
+				type: 'circle',
+				size: 2,
+				outline: {  width: 1,  color: 'currentColor'}
+			}
+		},
 
 		// The data for the dataset
-		data: {
-			labels: g_dates,
-			datasets: [{
-				label: 'Cases',
-				backgroundColor: 'rgb(255, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
-				data: g_cases
-			}, {
-				label: 'Deaths',
-				backgroundColor: 'rgb(255, 99, 132)',
-				borderColor: 'rgb(255, 99, 132)',
-				data: g_deaths
-			}]
-		},
+		series: series,
 
 		// Configuration options go here
 		options: {}
@@ -88,61 +87,66 @@ $(document).ready(function(){
 			var dates_arr = [];
 			var confirmed_arr = [];
 			var deaths_arr = [];
+			
 			for (n = 0; n < Object.keys(data).length; n++) {
 				var prev_confirmed = 0;
 				var prev_deaths = 0;
 				Object.values(data)[n].forEach(({ date, confirmed, recovered, deaths }) =>
 					{
 						if (n <= 0) {
-							dates_arr.push(date);
-							confirmed_arr.push(confirmed - prev_confirmed);
-							deaths_arr.push(deaths - prev_deaths);
+							confirmed_arr.push([date, confirmed]);
+							deaths_arr.push([date, deaths]);
 						} else {
-							confirmed_arr[n] = confirmed_arr[n] + (confirmed - prev_confirmed);
-							deaths_arr[n] = deaths_arr[n] + (deaths - prev_deaths);
+							confirmed_arr[n] = [date, confirmed_arr[n][1] + (confirmed)];
+							deaths_arr[n] = [date, deaths_arr[n][1] + (deaths)];
 						}
-						prev_confirmed = confirmed;
-						prev_deaths = deaths;
 					}
 				)
-				prev_confirmed = 0;
-				prev_deaths = 0;
 			}
 			
 			//Data
 			g_dates = dates_arr.slice(0);
-			g_cases = confirmed_arr.slice(0);
-			g_deaths = deaths_arr.slice(0);
-			fill_data();
+			
+			var series = [
+			   {name: 'Cases', points: confirmed_arr},
+			   {name: 'Deaths', points: deaths_arr}
+			];
+			
+			fill_data(series);
 
 		// Handle a country region
 		} else if (countries.includes(loc)) {
 			
 			var n = 0;
 			
-			var dates = new Array();
-			var confirmed = new Array();
-			var deaths = new Array();
+			var dates_arr = [];
+			var confirmed_arr = [];
+			var deaths_arr = [];
 			
 			data[loc].forEach(({ date, confirmed, recovered, deaths }) =>
 				{
 					// Count up cases and deaths
-					date[n] = date;
-					confirmed[n] = confirmed;
-					deaths[n] = deaths;
-				})
+					dates_arr.push(date);
+					confirmed_arr.push([date, confirmed]);
+					deaths_arr.push([date, deaths]);
+				}
+			)
 				
 			//Data
-			g_dates = dates.slice(0);
-			g_cases = confirmed.slice(0);
-			g_deaths = deaths.slice(0);
-			fill_data();
+			g_dates = dates_arr.slice(0);
+			
+			var series = [
+			   {name: 'Cases', points: confirmed_arr},
+			   {name: 'Deaths', points: deaths_arr}
+			];
+			
+			fill_data(series);
 			
 		// Handle state & county regions
 		} else {
 			
-			// Flag for determined undefined region/location
-			var locFlag = false;
+			// Check if location already found
+			var loc_flag = false;
 			
 			// Fetch & check county data from NY Times
 			JSC.fetch('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
@@ -151,31 +155,33 @@ $(document).ready(function(){
 				  
 				 let countyData = JSC.csv2Json(data, ",");
 				 
-				 var dates = new Array();
-				 var confirmed = new Array();
-				 var deaths = new Array();
+				 var dates_arr = [];
+				 var confirmed_arr = [];
+				 var deaths_arr = [];
 				  
 				 countyData.forEach(({ date, county, state, fips, cases, deaths }) => 
 						{
-							
-							var n = 0;
-							
 							if (loc === (county + ", " + state)) {
-								locFlag = true;
+								loc_flag = true;
 								// Count up cases and deaths
-								date[n] = date;
-								confirmed[n] = confirmed;
-								deaths[n] = deaths;
-								n++;
+								dates_arr.push(date);
+								confirmed_arr.push([date, cases]);
+								deaths_arr.push([date, deaths]);
 							}
-						
-						})
-						
+						}
+				 )
+				
+				if (loc_flag) {
 					//Data
-					g_dates = dates.slice(0);
-					g_cases = confirmed.slice(0);
-					g_deaths = deaths.slice(0);
-					fill_data();
+					g_dates = dates_arr.slice(0);
+					
+					var series = [
+					   {name: 'Cases', points: confirmed_arr},
+					   {name: 'Deaths', points: deaths_arr}
+					];
+					
+					fill_data(series);
+				}
 				  
 			  });
 			  
@@ -186,39 +192,33 @@ $(document).ready(function(){
 				  
 				  let stateData = JSC.csv2Json(data, ",");
 				  
-				  var dates = new Array();
-				  var confirmed = new Array();
-				  var deaths = new Array();
+				  var dates_arr = [];
+				  var confirmed_arr = [];
+				  var deaths_arr = [];
 			  
 				  stateData.forEach(({ date, state, fips, cases, deaths }) => 
 					{
-						
-						var n = 0;
-					
 						if (loc === state) {
-							locFlag = true;
 							// Count up cases and deaths
-							date[n] = date;
-							confirmed[n] = confirmed;
-							deaths[n] = deaths;
-							n++;
-							
+							dates_arr.push(date);
+							confirmed_arr.push([date, cases]);
+							deaths_arr.push([date, deaths]);
 						}
-					
 					})
+							
+					if (!loc_flag) {
+						//Data
+						g_dates = dates_arr.slice(0);
 						
-					//Data
-					g_dates = dates.slice(0);
-					g_cases = confirmed.slice(0);
-					g_deaths = deaths.slice(0);
-					fill_data();
+						var series = [
+						   {name: 'Cases', points: confirmed_arr},
+						   {name: 'Deaths', points: deaths_arr}
+						];
+						
+						fill_data(series);
+					}
 						
 			  });
-			  
-			// Handling for location not set/found
-			if (!locFlag) {
-				fill_data();
-			}
 			
 		}
 		
