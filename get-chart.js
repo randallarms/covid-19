@@ -40,6 +40,11 @@ function fill_data(series) {
 		
 		legend_visible: true,
 		
+		legend: {
+			position: 'bottom',
+			template: '%icon,%name',
+		},
+		
 		xAxis: {
 			crosshair_enabled: true,
 			scale: {type: 'time' }
@@ -89,8 +94,6 @@ $(document).ready(function(){
 			var deaths_arr = [];
 			
 			for (n = 0; n < Object.keys(data).length; n++) {
-				var prev_confirmed = 0;
-				var prev_deaths = 0;
 				Object.values(data)[n].forEach(({ date, confirmed, recovered, deaths }) =>
 					{
 						if (n <= 0) {
