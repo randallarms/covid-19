@@ -1,26 +1,33 @@
+<!-- Get info on location/region -->
+
+<script src="get-data.js"></script>
+<script src="get-chart.js"></script>
+
 <!-- JS Charting script -->
 
 <script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
-<!-- Drop-down list input of available regions -->
+<!-- Region selection script -->
 
-		<script type="text/javascript">
-			function updateURL(val) {
-				window.location.href = "/sample-page.html?in=" + val;
-			}
-			
-			function select(elem) {
-				var val = elem.options[elem.selectedIndex].value;
-				updateURL(val);
-			}
-			
-			function input(elem) {
-				if (event.keyCode === 13){
-					var val = elem.value;
-					updateURL(val);
-				}
-			}
-		</script>
+<script type="text/javascript">
+	function updateURL(val) {
+		window.location.href = "/sample-page.html?in=" + val;
+	}
+	
+	function select(elem) {
+		var val = elem.options[elem.selectedIndex].value;
+		updateURL(val);
+	}
+	
+	function input(elem) {
+		if (event.keyCode === 13){
+			var val = elem.value;
+			updateURL(val);
+		}
+	}
+</script>
+
+<!-- Drop-down list input of available regions -->
 
 <!-- Search by U.S. county -->
 
@@ -282,9 +289,7 @@
 	</select>
 </div>
 
-<!-- Get info on location/region -->
-
-<script src="get-data.js"></script>
+<!-- Data display -->
 
 <p id="data">
 	<span id="title">COVID-19 Tracker</span><br />
@@ -294,4 +299,6 @@
 	
 	<span id="confirmed-title">Cases:</span><br /><span id="confirmed">(n/a)</span><br />
 	<span id="deaths-title">Deaths:</span><br /><span id="deaths">(n/a)</span><br />
+	
+	<div id="chart"></div>
 </p>

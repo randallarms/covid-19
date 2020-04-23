@@ -2,7 +2,13 @@
 
 Track coronavirus statistics live by region @ https://www.randallarms.com/covid-19
 
-Currently supports live statistic display only. Features coming soon: charts, maps, and graphs pages.
+### Types of data displays
+
+View total cases/deaths count @ https://www.randallarms.com/covid-19
+
+View line graph of daily cases/deaths @ https://www.randallarms.com/covid-19/chart
+
+(Map version coming soon.)
 
 ### How to use
 

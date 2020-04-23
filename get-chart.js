@@ -47,7 +47,7 @@ function fill_data(series) {
 		
 		xAxis: {
 			crosshair_enabled: true,
-			scale: {type: 'time' }
+			scale: { type: 'time' }
 		},
 		
 		defaultSeries: {
@@ -93,15 +93,23 @@ $(document).ready(function(){
 			var confirmed_arr = [];
 			var deaths_arr = [];
 			
+			var confirmed_list = {};
+			var deaths_list = {};
+			
+			// Loop through each country
 			for (n = 0; n < Object.keys(data).length; n++) {
+				var date_counter = 0;
+				// Loop through each date in country
 				Object.values(data)[n].forEach(({ date, confirmed, recovered, deaths }) =>
 					{
 						if (n <= 0) {
+							dates_arr.push(date);
 							confirmed_arr.push([date, confirmed]);
 							deaths_arr.push([date, deaths]);
 						} else {
-							confirmed_arr[n] = [date, confirmed_arr[n][1] + (confirmed)];
-							deaths_arr[n] = [date, deaths_arr[n][1] + (deaths)];
+							confirmed_arr[date_counter] = [date, confirmed_arr[date_counter][1] + (confirmed)];
+							deaths_arr[date_counter] = [date, deaths_arr[date_counter][1] + (deaths)];
+							date_counter++;
 						}
 					}
 				)
