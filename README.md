@@ -8,7 +8,7 @@ View total cases/deaths count @ https://www.randallarms.com/covid-19
 
 View line graph of daily cases/deaths @ https://www.randallarms.com/covid-19/chart
 
-(Map version coming soon.)
+View world map of cases @ https://www.randallarms.com/covid-19/map
 
 ### How to use
 
