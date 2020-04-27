@@ -37,59 +37,7 @@ function fill_data(series) {
 		}
 	);
 	
-} 
-
-function color_code(cases, max) {
-	
-	var color = "rgba(204, 0, 0, 1)";
-	
-	var percent_max = cases / max;
-	
-	if (cases == 0) {
-		color = "rgba(255, 255, 255, 1)";
-	} else if (percent_max < 0.0001) {
-		color = "rgba(204, 150, 150, 0.1)";
-	} else if (percent_max < 0.001) {
-		color = "rgba(204, 0, 0, 0.1)";
-	} else if (percent_max < 0.01) {
-		color = "rgba(204, 0, 0, 0.3)";
-	} else if (percent_max < 0.1) {
-		color = "rgba(204, 0, 0, 0.5)";
-	} else if (percent_max < 0.5) {
-		color = "rgba(204, 0, 0, 0.7)";
-	} else if (percent_max < 0.9) {
-		color = "rgba(204, 0, 0, 0.9)";
-	} else {
-		color = "rgba(204, 0, 0, 1)";
-	}
-	
-	return color;
-	
 }
-
-var unreported = [
-	
-	"Bermuda",
-	"Comoros",
-	"Curaçao",
-	"Cayman Is.",
-	"Greenland",
-	"Guam",
-	"Hong Kong",
-	"Isle of Man",
-	"Jersey",
-	"Lesotho",
-	"Macao",
-	"St-Martin",
-	"Montserrat",
-	"Niue",
-	"Nauru",
-	"Puerto Rico",
-	"Dem. Rep. Korea",
-	"Tajikistan",
-	"Turkmenistan"
-	
-];
 	  
 // Wait for document load
 $(document).ready(function(){
@@ -173,6 +121,58 @@ $(document).ready(function(){
 	});
 	  
 });
+
+function color_code(cases, max) {
+	
+	var color = "rgba(204, 0, 0, 1)";
+	
+	var percent_max = cases / max;
+	
+	if (cases == 0) {
+		color = "rgba(255, 255, 255, 1)";
+	} else if (percent_max < 0.0001) {
+		color = "rgba(204, 150, 150, 0.1)";
+	} else if (percent_max < 0.001) {
+		color = "rgba(204, 0, 0, 0.1)";
+	} else if (percent_max < 0.01) {
+		color = "rgba(204, 0, 0, 0.3)";
+	} else if (percent_max < 0.1) {
+		color = "rgba(204, 0, 0, 0.5)";
+	} else if (percent_max < 0.5) {
+		color = "rgba(204, 0, 0, 0.7)";
+	} else if (percent_max < 0.9) {
+		color = "rgba(204, 0, 0, 0.9)";
+	} else {
+		color = "rgba(204, 0, 0, 1)";
+	}
+	
+	return color;
+	
+}
+
+var unreported = [
+	
+	"Bermuda",
+	"Comoros",
+	"Curaçao",
+	"Cayman Is.",
+	"Greenland",
+	"Guam",
+	"Hong Kong",
+	"Isle of Man",
+	"Jersey",
+	"Lesotho",
+	"Macao",
+	"St-Martin",
+	"Montserrat",
+	"Niue",
+	"Nauru",
+	"Puerto Rico",
+	"Dem. Rep. Korea",
+	"Tajikistan",
+	"Turkmenistan"
+	
+];
 
 function country_code(country) {
 	
