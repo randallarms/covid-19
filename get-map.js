@@ -92,7 +92,7 @@ $(document).ready(function(){
 				var code = country_code(country);
 				var color = color_code(subtotal_confirmed, max_cases);
 				
-				if (code != "...") {
+				if (code != "..." && code != "none") {
 					points.push( { map: code, color: color, z: subtotal_confirmed } );
 				}
 				

@@ -1,21 +1,17 @@
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <!-- Get info on location/region -->
-
 <script src="get-data.js"></script>
-<script src="get-chart.js"></script>
-
-<!-- JS Charting script -->
-
-<script src="https://code.jscharting.com/2.9.0/jscharting.js"></script>
 
 <!-- Region selection script -->
-
 <script type="text/javascript">
 	function updateURL(val) {
-		window.location.href = "/sample-page.html?in=" + val;
+		window.location.href = "sample-page.html?in=" + val;
 	}
 	
 	function select(elem) {
-		var val = elem.options[elem.selectedIndex].value;
+		var val = elem.value;
 		updateURL(val);
 	}
 	
@@ -26,19 +22,19 @@
 		}
 	}
 </script>
-
+	
 <!-- Drop-down list input of available regions -->
 
 <!-- Search by U.S. county -->
 
-<div id="input-container">
-	<input id="input" name="input" placeholder="Search by county (i.e. Los Angeles, California)" onkeypress="input(document.getElementById('input'))">
+<div id="input-container" style="width:300px;">
+	<input id="input" name="input" placeholder="Search by county (i.e. Los Angeles, California)" onkeypress="input(document.getElementById('input'));" style="width:300px;">
 </div>
 		
 <!-- Search by region (country or U.S. state) -->
 
 <div id="selection-container">
-	<select id="selection" onchange="updateURL(document.getElementById('selection'));">
+	<select id="selection" name="selection" onchange="select(document.getElementById('selection'));">
 		<option selected disabled>Select region (country or US state)</option>
 		<option value="Worldwide">Worldwide</option>
 		<option value="US">United States</option>
@@ -292,14 +288,16 @@
 <!-- Data display -->
 
 <p id="data">
-	<span id="title">COVID-19 Tracker</span><br />
+	<span id="title">COVID-19 Tracker</span><br /><br />
 
 	<span id="region">Loading...</span><br />
 	<span id="date">(n/a)</span><br /><br />
 	
-	<span id="confirmed-title">Cases:</span><br /><span id="confirmed">(n/a)</span><br />
-	<span id="deaths-title">Deaths:</span><br /><span id="deaths">(n/a)</span><br />
+	<span id="confirmed-title">Cases:</span><br /><span id="confirmed">(n/a)</span><br /><br />
+	<span id="deaths-title">Deaths:</span><br /><span id="deaths">(n/a)</span><br /><br />
 	
 	<div id="chart"></div>
 	<div id="map"></div>
 </p>
+
+</html>
